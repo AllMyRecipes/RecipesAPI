@@ -30,5 +30,6 @@ public class Recipe {
     )
     private List<Ingredient> ingredients;
 
-
+    @ManyToOne
+    private Step steps;
 }
