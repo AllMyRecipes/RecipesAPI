@@ -19,9 +19,19 @@ public class Recipe {
     private Long id;
     private String name;
     private double time;
-    @ManyToOne
-    @JoinColumn(name = "category_id")
-    private Category categories;
+
+//    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+//    @JoinColumn(name = "recipe_id")
+//    private List<Category> categories;
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "recipe_category",
+            joinColumns = {@JoinColumn(name = "recipe_id")},
+            inverseJoinColumns = {@JoinColumn(name = "category_id")}
+    )
+    private List<Category> categories;
+
+
     @ManyToMany
     @JoinTable(
             name= "recipe_ingredient",

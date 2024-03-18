@@ -1,5 +1,6 @@
 package raphael.recipesapi.controllers;
 
+import ch.qos.logback.core.encoder.EchoEncoder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +33,7 @@ public class CategoryController {
         }
         return ResponseEntity.ok().body(allCategories);
     }
-    @PostMapping("/categories")
+    @PostMapping("/category")
     public ResponseEntity<Category> newCategory(@RequestBody Category category){
         return ResponseEntity.ok().body(categoryService.saveCategory(category));
     }
@@ -45,6 +46,17 @@ public class CategoryController {
             log.info(e.getMessage());
         }
         return ResponseEntity.ok().body("Category deleted");
+    }
+    @PutMapping("/category")
+    public ResponseEntity<Category> updateCategory(@RequestBody Category category){
+        Category categoryToUpdate = categoryService.getCategory(category.getId());
+        try{
+            categoryToUpdate.setName(category.getName());
+            categoryService.saveCategory(categoryToUpdate);
+        }catch (Exception e) {
+            log.info(e.getMessage());
+        }
+        return ResponseEntity.ok().body(categoryToUpdate);
     }
 
 
