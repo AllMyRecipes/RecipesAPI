@@ -23,7 +23,7 @@ public class Recipe {
 //    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 //    @JoinColumn(name = "recipe_id")
 //    private List<Category> categories;
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "recipe_category",
             joinColumns = {@JoinColumn(name = "recipe_id")},
@@ -35,7 +35,7 @@ public class Recipe {
     @ManyToMany
     @JoinTable(
             name= "recipe_ingredient",
-            joinColumns = @JoinColumn(name = "recipe_id"),
+            joinColumns = { @JoinColumn(name = "recipe_id")},
             inverseJoinColumns = @JoinColumn(name="ingredient_id")
     )
     private List<Ingredient> ingredients;

@@ -36,6 +36,18 @@ public class RecipeController {
     return ResponseEntity.ok().body(listRecipes);
     }
 
+    @GetMapping("/recipe/{word}")
+    public ResponseEntity<Page<Recipe>> recipeByKeyWord(@PathVariable("word") String word, @RequestParam("page") int page){
+        Page<Recipe> listRecipes = null;
+        try {
+            PageRequest pageRequest = PageRequest.of(page, 5);
+            listRecipes = recipeService.getRecipeByKeyWord(pageRequest, word);
+        } catch (Exception e){
+            log.info(e.getMessage());
+        }
+        return ResponseEntity.ok().body(listRecipes);
+    }
+
     @PostMapping("/recipe")
     public ResponseEntity<Recipe> saveRecipe(@RequestBody Recipe recipe){
         Recipe recipeToSave = new Recipe();
@@ -56,6 +68,26 @@ public class RecipeController {
             log.info(e.getMessage());
         }
         return ResponseEntity.ok().body(recipeToSave);
+    }
+
+    @GetMapping("/recipe")
+    public ResponseEntity<Recipe> getRecipeById(@RequestParam("id")Long id){
+        Recipe recipe = new Recipe();
+        try{
+            recipe = recipeService.getRecipeById(id);
+        }catch (Exception e){
+            log.info(e.getMessage());
+        }
+        return ResponseEntity.ok().body(recipe);
+    }
+    @DeleteMapping("/recipe")
+    public ResponseEntity<String> deleteRecipe(@RequestParam("id")Long id){
+        try{
+            recipeService.deleteRecipe(id);
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+        return ResponseEntity.ok().body("Recipe deleted");
     }
 
 }
