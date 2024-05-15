@@ -13,5 +13,5 @@ public interface RecipeService {
     public void deleteRecipe(Long id);
     public Recipe getRecipeById(Long id);
     public Page<Recipe> getRecipeByKeyWord(PageRequest page, String word);
-    public Page <Recipe> getRecipeByCategory(PageRequest page,Category category);
+    public Page <Recipe> getRecipeByCategory(PageRequest page,Long categoryId);
 }

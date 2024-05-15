@@ -42,8 +42,8 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public Page<Recipe> getRecipeByCategory(PageRequest page, Category category) {
-        return null;
+    public Page<Recipe> getRecipeByCategory(PageRequest page, Long categoryId) {
+        return recipeRepository.getRecipeByCategoriesId(page, categoryId);
     }
 
 }

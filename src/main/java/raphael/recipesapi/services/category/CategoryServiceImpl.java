@@ -31,9 +31,7 @@ public class CategoryServiceImpl implements CategoryService {
     public Category getCategory(Long id) {
         Optional<Category> category = categoryRepository.findById(id);
         if(category.isPresent()){
-            Category cat;
-            cat = category.get();
-            return cat;
+            return category.get();
         }else{
             throw new NoSuchElementException("Category with Id:" + id + "Not found");
         }
@@ -41,8 +39,9 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public void deleteCategory(Long id) {
+    public void deleteCategory(Long id){
         Category category = getCategory(id);
         categoryRepository.delete(category);
     }
+
 }

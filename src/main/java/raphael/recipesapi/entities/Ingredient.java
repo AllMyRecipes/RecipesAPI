@@ -1,5 +1,6 @@
 package raphael.recipesapi.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,6 +19,8 @@ public class Ingredient {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    @ManyToMany(mappedBy = "ingredients")
-    private List<Recipe> recipes;
+//    @JsonIgnore
+//    @ManyToMany(mappedBy = "ingredients")
+//    private List<Recipe> recipes;
+
 }

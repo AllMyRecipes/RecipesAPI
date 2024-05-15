@@ -6,8 +6,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import raphael.recipesapi.entities.Category;
+import raphael.recipesapi.entities.Ingredient;
+import raphael.recipesapi.entities.Quantity;
 import raphael.recipesapi.entities.Recipe;
 import raphael.recipesapi.services.category.CategoryServiceImpl;
+import raphael.recipesapi.services.ingredient.IngredientServiceImpl;
+import raphael.recipesapi.services.quantity.QuantityService;
+import raphael.recipesapi.services.quantity.QuantityServiceImpl;
 import raphael.recipesapi.services.recipe.RecipeServiceImpl;
 
 import java.util.ArrayList;
@@ -20,9 +25,13 @@ import java.util.List;
 public class RecipeController {
     private final RecipeServiceImpl recipeService;
     private final CategoryServiceImpl categoryService;
-    public RecipeController (RecipeServiceImpl recipeService, CategoryServiceImpl categoryService){
+    private final IngredientServiceImpl ingredientService;
+    private final QuantityServiceImpl quantityService;
+    public RecipeController (RecipeServiceImpl recipeService, CategoryServiceImpl categoryService, IngredientServiceImpl ingredientService, QuantityServiceImpl quantityService){
         this.recipeService = recipeService;
         this.categoryService = categoryService;
+        this.ingredientService = ingredientService;
+        this.quantityService = quantityService;
     }
     @GetMapping("/recipes")
     public ResponseEntity<Page<Recipe>> allRecipes(@RequestParam("page") int page){
@@ -46,6 +55,17 @@ public class RecipeController {
             log.info(e.getMessage());
         }
         return ResponseEntity.ok().body(listRecipes);
+    }
+    @GetMapping("/recipe-by-category")
+    public ResponseEntity<Page<Recipe>> recipeByCategory(@RequestParam("categoryId")Long categoryId, @RequestParam("page")int page){
+        Page<Recipe> listRecipes = null;
+        try {
+            PageRequest pageRequest= PageRequest.of(page, 5);
+            listRecipes = recipeService.getRecipeByCategory(pageRequest, categoryId);
+        }catch (Exception e){
+            log.info(e.getMessage());
+        }
+    return ResponseEntity.ok().body(listRecipes);
     }
 
     @PostMapping("/recipe")
