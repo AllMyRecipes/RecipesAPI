@@ -28,17 +28,28 @@ public class QuantityController {
         this.ingredientService = ingredientService;
         this.quantityService = quantityService;
     }
+    @GetMapping("/quantity/{recipeId}")
+    public ResponseEntity<List<Quantity>> getQuantityByRecipeId(@PathVariable("recipeId") Long recipeId){
+        List<Quantity> quantities = null;
+        try {
+            quantities = quantityService.getQuantityByRecipeId(recipeId);
+        } catch (Exception e){
+            log.info(e.getMessage());
+        }
+        return ResponseEntity.ok().body(quantities);
+    }
+
     @PostMapping("/quantity/{recipeId}")
-    public ResponseEntity<Quantity> saveQuantity(@RequestBody Quantity quantity, @PathVariable("recipeId") Long recipeId, @RequestBody List<Ingredient> allIngredients){
+    public ResponseEntity<Quantity> saveQuantity(@RequestBody Quantity quantity, @PathVariable("recipeId") Long recipeId, @RequestBody Long ingredientId){
         Quantity newQuantity = new Quantity();
         try{
-            for(Ingredient ingredient : allIngredients){
+
                 newQuantity.setMeasure_unite(quantity.getMeasure_unite());
                 newQuantity.setRecipe(recipeService.getRecipeById(recipeId));
-                newQuantity.setIngredient(ingredient);
+                newQuantity.setIngredient(ingredientService.getIngredientById(ingredientId));
                 newQuantity.setQuantity(newQuantity.getQuantity());
                 newQuantity = quantityService.saveQuantity(newQuantity);
-            }
+
         } catch (Exception e ){
             log.info(e.getMessage());
         }

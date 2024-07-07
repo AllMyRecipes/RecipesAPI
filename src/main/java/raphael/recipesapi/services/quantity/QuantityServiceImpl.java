@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import raphael.recipesapi.entities.Quantity;
 import raphael.recipesapi.repositories.QuantityRepository;
 
+import java.util.List;
 import java.util.Optional;
 @Service
 @Slf4j
@@ -22,9 +23,9 @@ public class QuantityServiceImpl implements QuantityService {
 
 
     @Override
-    public Quantity getQuantityById(Long id) {
-        Optional<Quantity> quantity = quantityRepository.findById(id);
-        return quantity.orElse(null) ;
+    public List<Quantity> getQuantityByRecipeId(Long id) {
+        return quantityRepository.findByRecipeId(id);
+
     }
 
     @Override

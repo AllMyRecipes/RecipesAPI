@@ -1,9 +1,11 @@
 package raphael.recipesapi.controllers;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import raphael.recipesapi.entities.Ingredient;
+import raphael.recipesapi.exceptions.Exceptions;
 import raphael.recipesapi.services.ingredient.IngredientServiceImpl;
 
 import java.util.List;
@@ -40,10 +42,13 @@ public class IngredientController {
         try {
             Ingredient ingredientToDelete = ingredientService.getIngredientById(id);
             ingredientService.deleteIngredient(ingredientToDelete);
-        } catch (Exception e){
-            log.info(e.getMessage());
+            return ResponseEntity.ok().body("ingredient deleted");
+        } catch ( Exceptions.CategoryNotFoundException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("L'ingredient avec l'ID fourni n'existe pas");
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Une erreur est survenue lors de la suppression de l' ingredient");
         }
-        return ResponseEntity.ok().body("ingredient deleted");
+
     }
 
 

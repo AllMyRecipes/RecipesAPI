@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -20,8 +21,11 @@ public class Category {
     private Long id;
     private String name;
     private String color = "#FFFFFF";
+//    @JsonIgnore
+//    @ManyToMany(mappedBy = "categories", fetch = FetchType.LAZY)
+//    private List<Recipe> recipes;
     @JsonIgnore
-    @ManyToMany(mappedBy = "categories", fetch = FetchType.LAZY)
-    private List<Recipe> recipes;
+    @ManyToMany(mappedBy = "categories")
+    private List<Recipe> recipes = new ArrayList<>();
 
 }

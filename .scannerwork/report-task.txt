@@ -1,0 +1,6 @@
+projectKey=recettesAPI
+serverUrl=http://localhost:9000
+serverVersion=10.5.1.90531
+dashboardUrl=http://localhost:9000/dashboard?id=recettesAPI
+ceTaskId=f9bc6291-5355-43ad-973a-dd78d24b3f0b
+ceTaskUrl=http://localhost:9000/api/ce/task?id=f9bc6291-5355-43ad-973a-dd78d24b3f0b
