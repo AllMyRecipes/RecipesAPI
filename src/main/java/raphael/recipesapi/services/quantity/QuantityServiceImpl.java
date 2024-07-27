@@ -32,4 +32,9 @@ public class QuantityServiceImpl implements QuantityService {
     public void deleteQuantity(Long id) {
         quantityRepository.deleteById(id);
     }
+
+    @Override
+    public void deleteQuantityByRecipeId(Long id) {
+        quantityRepository.deleteByRecipeId(id);
+    }
 }

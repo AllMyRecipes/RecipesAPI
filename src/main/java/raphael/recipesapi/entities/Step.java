@@ -1,9 +1,7 @@
 package raphael.recipesapi.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,5 +18,14 @@ public class Step {
     private Long id;
     private String title;
     private String description;
-    
+    @ManyToOne
+    @JoinColumn(name = "recipe_id", nullable = false)
+    @JsonIgnore
+    private Recipe recipe;
+
+    public Step(String title, String description, Recipe recipe) {
+        this.title = title;
+        this.description = description;
+        this.recipe = recipe;
+    }
 }

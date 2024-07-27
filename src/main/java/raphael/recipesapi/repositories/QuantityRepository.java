@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface QuantityRepository extends JpaRepository<Quantity, Long> {
     public List<Quantity> findByRecipeId(Long id);
+
+    void deleteByRecipeId(Long id);
 }

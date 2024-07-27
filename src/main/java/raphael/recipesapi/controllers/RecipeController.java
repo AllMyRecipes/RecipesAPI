@@ -14,6 +14,7 @@ import raphael.recipesapi.services.ingredient.IngredientServiceImpl;
 import raphael.recipesapi.services.quantity.QuantityService;
 import raphael.recipesapi.services.quantity.QuantityServiceImpl;
 import raphael.recipesapi.services.recipe.RecipeServiceImpl;
+import raphael.recipesapi.services.step.StepServiceImpl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,11 +28,13 @@ public class RecipeController {
     private final CategoryServiceImpl categoryService;
     private final IngredientServiceImpl ingredientService;
     private final QuantityServiceImpl quantityService;
-    public RecipeController (RecipeServiceImpl recipeService, CategoryServiceImpl categoryService, IngredientServiceImpl ingredientService, QuantityServiceImpl quantityService){
+    private final StepServiceImpl stepService;
+    public RecipeController (RecipeServiceImpl recipeService, CategoryServiceImpl categoryService, IngredientServiceImpl ingredientService, QuantityServiceImpl quantityService, StepServiceImpl stepService){
         this.recipeService = recipeService;
         this.categoryService = categoryService;
         this.ingredientService = ingredientService;
         this.quantityService = quantityService;
+        this.stepService = stepService;
     }
     @GetMapping("/recipes")
     public ResponseEntity<Page<Recipe>> allRecipes(@RequestParam("page") int page){

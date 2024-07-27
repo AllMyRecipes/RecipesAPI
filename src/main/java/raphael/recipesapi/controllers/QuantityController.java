@@ -15,8 +15,8 @@ import java.util.List;
 
 @RestController
 @Slf4j
-@CrossOrigin("*")
 @RequestMapping("/api")
+@CrossOrigin("*")
 public class QuantityController {
     private final RecipeServiceImpl recipeService;
     private final CategoryServiceImpl categoryService;
@@ -28,8 +28,8 @@ public class QuantityController {
         this.ingredientService = ingredientService;
         this.quantityService = quantityService;
     }
-    @GetMapping("/quantity/{recipeId}")
-    public ResponseEntity<List<Quantity>> getQuantityByRecipeId(@PathVariable("recipeId") Long recipeId){
+    @GetMapping("/quantity")
+    public ResponseEntity<List<Quantity>> getQuantityByRecipeId(@RequestParam("id") Long recipeId){
         List<Quantity> quantities = null;
         try {
             quantities = quantityService.getQuantityByRecipeId(recipeId);
@@ -39,26 +39,34 @@ public class QuantityController {
         return ResponseEntity.ok().body(quantities);
     }
 
-    @PostMapping("/quantity/{recipeId}")
-    public ResponseEntity<Quantity> saveQuantity(@RequestBody Quantity quantity, @PathVariable("recipeId") Long recipeId, @RequestBody Long ingredientId){
+    @PostMapping("/quantity")
+    public ResponseEntity<Quantity> saveQuantity(@RequestBody Quantity qtity, @RequestParam("id") Long recipeId){
+
         Quantity newQuantity = new Quantity();
+        Ingredient newIngredient;
+        Quantity response;
         try{
-
-                newQuantity.setMeasure_unite(quantity.getMeasure_unite());
-                newQuantity.setRecipe(recipeService.getRecipeById(recipeId));
-                newQuantity.setIngredient(ingredientService.getIngredientById(ingredientId));
-                newQuantity.setQuantity(newQuantity.getQuantity());
-                newQuantity = quantityService.saveQuantity(newQuantity);
-
-        } catch (Exception e ){
+            newQuantity.setQuantity(qtity.getQuantity());
+            newQuantity.setMeasure_unite(qtity.getMeasure_unite());
+            newQuantity.setRecipe(recipeService.getRecipeById(recipeId));
+            if (qtity.getIngredient().getId() == null){
+                newIngredient = ingredientService.saveIngredient(qtity.getIngredient());
+            } else {
+                newIngredient = ingredientService.getIngredientById(qtity.getIngredient().getId());
+            }
+            newQuantity.setIngredient(newIngredient);
+            response = quantityService.saveQuantity(newQuantity);
+        } catch (Exception e){
             log.info(e.getMessage());
+            return ResponseEntity.badRequest().body(null);
         }
-        return ResponseEntity.ok().body(newQuantity);
+
+        return ResponseEntity.ok().body(response);
     }
     @DeleteMapping("/quantity")
     public ResponseEntity<String> deleteQuantity(@RequestParam("id") Long id){
         try {
-
+            quantityService.deleteQuantity(id);
         }catch (Exception e){
             return ResponseEntity.badRequest().body(e.getMessage());
         }

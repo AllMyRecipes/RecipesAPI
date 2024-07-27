@@ -8,4 +8,5 @@ public interface QuantityService {
     public Quantity saveQuantity(Quantity quantity);
     public List<Quantity> getQuantityByRecipeId(Long id);
     public void deleteQuantity(Long id);
+    public void deleteQuantityByRecipeId(Long id);
 }

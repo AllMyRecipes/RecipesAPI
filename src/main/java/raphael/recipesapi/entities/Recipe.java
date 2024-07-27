@@ -22,9 +22,6 @@ public class Recipe {
     private String name;
     private double time;
 
-//    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-//    private List<Category> categories;
-
     @ManyToMany
     @JoinTable(
             name = "recipe_category",
@@ -35,5 +32,8 @@ public class Recipe {
 
     @OneToMany(mappedBy = "recipe", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Quantity> quantities;
+
+    @OneToMany(mappedBy = "recipe",cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private  List<Step> steps;
 
 }
