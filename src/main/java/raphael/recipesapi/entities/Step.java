@@ -17,6 +17,8 @@ public class Step {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
+    @Lob
+    @Column(length = 100000)
     private String description;
     @ManyToOne
     @JoinColumn(name = "recipe_id", nullable = false)
