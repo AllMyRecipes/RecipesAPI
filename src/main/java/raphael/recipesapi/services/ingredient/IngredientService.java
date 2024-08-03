@@ -9,4 +9,5 @@ public interface IngredientService {
     public Ingredient saveIngredient(Ingredient ingredient);
     public Ingredient getIngredientById(Long id);
     public void deleteIngredient(Ingredient ingredient);
+    public Ingredient getIngredientByName(String name);
 }

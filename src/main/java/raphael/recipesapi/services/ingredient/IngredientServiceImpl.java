@@ -5,6 +5,7 @@ import raphael.recipesapi.entities.Ingredient;
 import raphael.recipesapi.repositories.IngredientRepository;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -19,6 +20,8 @@ public class IngredientServiceImpl implements IngredientService {
 
     @Override
     public Ingredient saveIngredient(Ingredient ingredient) {
+        String name = ingredient.getName().toLowerCase();
+        ingredient.setName(name);
         return ingredientRepository.save(ingredient);
     }
 
@@ -35,5 +38,10 @@ public class IngredientServiceImpl implements IngredientService {
     @Override
     public void deleteIngredient(Ingredient ingredient) {
          ingredientRepository.delete(ingredient);
+    }
+
+    @Override
+    public Ingredient getIngredientByName(String name) {
+        return ingredientRepository.findByName(name);
     }
 }

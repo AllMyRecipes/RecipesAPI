@@ -6,4 +6,5 @@ import raphael.recipesapi.entities.Ingredient;
 
 @Repository
 public interface IngredientRepository extends JpaRepository<Ingredient, Long> {
+    Ingredient findByName(String name);
 }

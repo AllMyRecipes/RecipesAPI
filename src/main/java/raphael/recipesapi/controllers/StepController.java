@@ -48,4 +48,15 @@ public class StepController {
             return ResponseEntity.status(500).body("An error occurred while deleting the step"+ e.getMessage());
         }
     }
+    @PutMapping("/step")
+    public ResponseEntity<Step> updateStep(@RequestBody Step step){
+        Step stepUpdated = null;
+        try {
+            Step stepToUpdate = stepService.getStepById(step.getId());
+            stepUpdated = stepService.updateStep(step);
+        } catch (Exception e){
+            log.info(e.getMessage());
+        }
+        return ResponseEntity.ok().body(stepUpdated);
+    }
 }

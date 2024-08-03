@@ -42,4 +42,14 @@ public class StepServiceImpl implements StepService {
     public void deleteStepByRecipeId(Long id) {
         stepRepository.deleteByRecipeId(id);
     }
+
+    @Override
+    public Step updateStep(Step step) {
+        return stepRepository.save(step);
+    }
+
+    @Override
+    public Step getStepById(Long id) {
+        return stepRepository.findById(id).orElse(null);
+    }
 }

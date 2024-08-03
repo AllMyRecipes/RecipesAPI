@@ -40,29 +40,36 @@ public class QuantityController {
     }
 
     @PostMapping("/quantity")
-    public ResponseEntity<Quantity> saveQuantity(@RequestBody Quantity qtity, @RequestParam("id") Long recipeId){
+    public ResponseEntity<?> saveQuantity(@RequestBody Quantity qtity, @RequestParam("id") Long recipeId){
 
         Quantity newQuantity = new Quantity();
         Ingredient newIngredient;
-        Quantity response;
+        Quantity quantityResponse;
+
         try{
             newQuantity.setQuantity(qtity.getQuantity());
             newQuantity.setMeasure_unite(qtity.getMeasure_unite());
             newQuantity.setRecipe(recipeService.getRecipeById(recipeId));
             if (qtity.getIngredient().getId() == null){
-                newIngredient = ingredientService.saveIngredient(qtity.getIngredient());
+                String name = qtity.getIngredient().getName().toLowerCase();
+                Ingredient ingredientByName = ingredientService.getIngredientByName(name);
+                if (ingredientByName == null){
+                    newIngredient = ingredientService.saveIngredient(qtity.getIngredient());
+                } else {
+                    newIngredient = ingredientByName;
+                }
             } else {
                 newIngredient = ingredientService.getIngredientById(qtity.getIngredient().getId());
             }
             newQuantity.setIngredient(newIngredient);
-            response = quantityService.saveQuantity(newQuantity);
+            quantityResponse = quantityService.saveQuantity(newQuantity);
         } catch (Exception e){
             log.info(e.getMessage());
             return ResponseEntity.badRequest().body(null);
         }
-
-        return ResponseEntity.ok().body(response);
+        return ResponseEntity.ok().body(quantityResponse);
     }
+
     @DeleteMapping("/quantity")
     public ResponseEntity<String> deleteQuantity(@RequestParam("id") Long id){
         try {

@@ -9,4 +9,6 @@ public interface StepService {
     public void deleteStep(Long id);
     public List<Step> getStepByRecipeId(Long id);
     public void deleteStepByRecipeId(Long id);
+    public Step updateStep(Step step);
+    public Step getStepById(Long id);
 }
