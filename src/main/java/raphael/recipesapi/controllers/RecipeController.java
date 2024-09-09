@@ -3,6 +3,7 @@ package raphael.recipesapi.controllers;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import raphael.recipesapi.entities.Category;
@@ -16,6 +17,9 @@ import raphael.recipesapi.services.quantity.QuantityServiceImpl;
 import raphael.recipesapi.services.recipe.RecipeServiceImpl;
 import raphael.recipesapi.services.step.StepServiceImpl;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,7 +44,7 @@ public class RecipeController {
     public ResponseEntity<Page<Recipe>> allRecipes(@RequestParam("page") int page){
         Page<Recipe> listRecipes = null;
     try {
-        PageRequest pageRequest = PageRequest.of(page, 5);
+        PageRequest pageRequest = PageRequest.of(page, 10);
         listRecipes = recipeService.getAllRecipes(pageRequest);
     }catch (Exception e){
         log.info(e.getMessage());
@@ -111,6 +115,43 @@ public class RecipeController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
         return ResponseEntity.ok().body("Recipe deleted");
+    }
+    @PutMapping("/recipe")
+    public ResponseEntity<Recipe> updateRecipe(@RequestBody Recipe recipe){
+        Recipe recipeUpdated = new Recipe();
+        try {
+            Recipe recipeToUpdate = recipeService.getRecipeById(recipe.getId());
+            recipeToUpdate.setName(recipe.getName());
+            recipeToUpdate.setTime(recipe.getTime());
+            if (recipe.getCategories() != null){
+                List<Category> categories = new ArrayList<>();
+                for (Category category : recipe.getCategories()){
+                    Category categoryToAdd = categoryService.getCategory(category.getId());
+                    categories.add(categoryToAdd);
+                }
+                recipeToUpdate.setCategories(categories);
+            }
+            recipeUpdated = recipeService.saveRecipe(recipeToUpdate);
+        }catch (Exception e){
+            log.info(e.getMessage());
+        }
+        return ResponseEntity.ok().body(recipeUpdated);
+    }
+
+    @GetMapping(value = "/recipe/picture/{id}", produces = MediaType.IMAGE_JPEG_VALUE)
+    public ResponseEntity<?>getPicture(@PathVariable("id")Long id) throws IOException {
+        byte[] picture = null;
+        try{
+            Recipe recipe = recipeService.getRecipeById(id);
+            if(recipe.getPicture() == null) recipe.setPicture("default.jpg");
+            picture = Files.readAllBytes(Paths.get(System.getProperty("user.home")+"/recipe/picture/"+recipe.getPicture()));
+        } catch (Exception e){
+            log.error("Error to get picture: {}", id);
+            return ResponseEntity.internalServerError().body(e.getCause());
+
+        }
+
+        return ResponseEntity.ok().body(picture);
     }
 
 

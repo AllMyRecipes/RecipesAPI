@@ -7,17 +7,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import raphael.recipesapi.entities.Category;
 import raphael.recipesapi.repositories.CategoryRepository;
-import raphael.recipesapi.services.category.CategoryService;
 import raphael.recipesapi.services.category.CategoryServiceImpl;
 
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.Assert.assertFalse;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)

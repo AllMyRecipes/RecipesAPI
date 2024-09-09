@@ -52,8 +52,11 @@ public class StepController {
     public ResponseEntity<Step> updateStep(@RequestBody Step step){
         Step stepUpdated = null;
         try {
-            Step stepToUpdate = stepService.getStepById(step.getId());
-            stepUpdated = stepService.updateStep(step);
+            Step stepUpdate  = stepService.getStepById(step.getId());
+            stepUpdate.setTitle(step.getTitle());
+            stepUpdate.setDescription(step.getDescription());
+            stepUpdated = stepService.saveSteps(stepUpdate);
+
         } catch (Exception e){
             log.info(e.getMessage());
         }

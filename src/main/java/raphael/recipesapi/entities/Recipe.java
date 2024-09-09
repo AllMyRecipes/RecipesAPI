@@ -21,6 +21,7 @@ public class Recipe {
     private Long id;
     private String name;
     private double time;
+    private String picture;
 
     @ManyToMany
     @JoinTable(

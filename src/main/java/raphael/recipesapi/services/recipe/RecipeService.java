@@ -14,4 +14,5 @@ public interface RecipeService {
     public Recipe getRecipeById(Long id);
     public Page<Recipe> getRecipeByKeyWord(PageRequest page, String word);
     public Page <Recipe> getRecipeByCategory(PageRequest page,Long categoryId);
+
 }
