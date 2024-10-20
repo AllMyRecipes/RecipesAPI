@@ -57,6 +57,10 @@ public class RecipeServiceImpl implements RecipeService {
         return recipeRepository.getRecipeByCategoriesId(page, categoryId);
     }
 
+    @Override
+    public List<Recipe> homeRandomRecipes() {
+        return recipeRepository.homeRandomRecipes();
+    }
 
 
 }

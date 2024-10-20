@@ -81,6 +81,11 @@ public class RecipeController {
         try {
             recipeToSave.setName(recipe.getName());
             recipeToSave.setTime(recipe.getTime());
+            if(recipe.getPicture() == null) {
+                recipeToSave.setPicture("default.png");
+            } else {
+                recipeToSave.setPicture(recipe.getPicture());
+            }
             if (recipe.getCategories() != null){
                 List<Category>categories = new ArrayList<>();
                 for (Category category : recipe.getCategories()){
@@ -123,6 +128,7 @@ public class RecipeController {
             Recipe recipeToUpdate = recipeService.getRecipeById(recipe.getId());
             recipeToUpdate.setName(recipe.getName());
             recipeToUpdate.setTime(recipe.getTime());
+            recipeToUpdate.setPicture(recipe.getPicture());
             if (recipe.getCategories() != null){
                 List<Category> categories = new ArrayList<>();
                 for (Category category : recipe.getCategories()){
@@ -143,15 +149,25 @@ public class RecipeController {
         byte[] picture = null;
         try{
             Recipe recipe = recipeService.getRecipeById(id);
-            if(recipe.getPicture() == null) recipe.setPicture("default.jpg");
-            picture = Files.readAllBytes(Paths.get(System.getProperty("user.home")+"/recipe/picture/"+recipe.getPicture()));
+            picture = Files.readAllBytes(Paths.get(System.getProperty("user.dir")+"/pictures/"+recipe.getPicture()));
         } catch (Exception e){
-            log.error("Error to get picture: {}", id);
+            log.error( e.getMessage());
             return ResponseEntity.internalServerError().body(e.getCause());
 
         }
 
         return ResponseEntity.ok().body(picture);
+    }
+
+    @GetMapping("/recipe/home")
+    public ResponseEntity<List<Recipe>> getHomeRecipes(){
+        List<Recipe> recipes = null;
+        try {
+            recipes = recipeService.homeRandomRecipes();
+        }catch (Exception e){
+            log.info(e.getMessage());
+        }
+        return ResponseEntity.ok().body(recipes);
     }
 
 
