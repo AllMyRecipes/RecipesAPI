@@ -4,7 +4,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import raphael.recipesapi.entities.Category;
 import raphael.recipesapi.entities.Recipe;
 import raphael.recipesapi.repositories.RecipeRepository;
 import raphael.recipesapi.services.quantity.QuantityServiceImpl;
@@ -57,6 +56,15 @@ public class RecipeServiceImpl implements RecipeService {
         return recipeRepository.getRecipeByCategoriesId(page, categoryId);
     }
 
+    @Override
+    public List<Recipe> homeRandomRecipes() {
+        return recipeRepository.homeRandomRecipes();
+    }
+
+    @Override
+    public Page<Recipe> getRecipesByIngredientId(PageRequest page,Long ingredientId) {
+        return recipeRepository.findRecipesByIngredientId(page ,ingredientId);
+    }
 
 
 }

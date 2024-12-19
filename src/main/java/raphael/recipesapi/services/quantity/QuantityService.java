@@ -1,6 +1,9 @@
 package raphael.recipesapi.services.quantity;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import raphael.recipesapi.entities.Quantity;
+import raphael.recipesapi.entities.Recipe;
 
 import java.util.List;
 

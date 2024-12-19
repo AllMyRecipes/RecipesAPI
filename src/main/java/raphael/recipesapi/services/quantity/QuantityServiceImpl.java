@@ -1,8 +1,11 @@
 package raphael.recipesapi.services.quantity;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import raphael.recipesapi.entities.Quantity;
+import raphael.recipesapi.entities.Recipe;
 import raphael.recipesapi.repositories.QuantityRepository;
 
 import java.util.List;
@@ -37,4 +40,5 @@ public class QuantityServiceImpl implements QuantityService {
     public void deleteQuantityByRecipeId(Long id) {
         quantityRepository.deleteByRecipeId(id);
     }
+
 }
