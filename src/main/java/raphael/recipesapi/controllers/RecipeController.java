@@ -7,12 +7,11 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import raphael.recipesapi.entities.Category;
-import raphael.recipesapi.entities.Ingredient;
-import raphael.recipesapi.entities.Quantity;
+
 import raphael.recipesapi.entities.Recipe;
 import raphael.recipesapi.services.category.CategoryServiceImpl;
 import raphael.recipesapi.services.ingredient.IngredientServiceImpl;
-import raphael.recipesapi.services.quantity.QuantityService;
+
 import raphael.recipesapi.services.quantity.QuantityServiceImpl;
 import raphael.recipesapi.services.recipe.RecipeServiceImpl;
 import raphael.recipesapi.services.step.StepServiceImpl;
@@ -22,6 +21,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
@@ -30,21 +30,17 @@ import java.util.List;
 public class RecipeController {
     private final RecipeServiceImpl recipeService;
     private final CategoryServiceImpl categoryService;
-    private final IngredientServiceImpl ingredientService;
-    private final QuantityServiceImpl quantityService;
-    private final StepServiceImpl stepService;
+
     public RecipeController (RecipeServiceImpl recipeService, CategoryServiceImpl categoryService, IngredientServiceImpl ingredientService, QuantityServiceImpl quantityService, StepServiceImpl stepService){
         this.recipeService = recipeService;
         this.categoryService = categoryService;
-        this.ingredientService = ingredientService;
-        this.quantityService = quantityService;
-        this.stepService = stepService;
     }
     @GetMapping("/recipes")
-    public ResponseEntity<Page<Recipe>> allRecipes(@RequestParam("page") int page){
+    public ResponseEntity<Page<Recipe>> allRecipes(@RequestParam("page") int page, @RequestParam("size") Optional<Integer>size){
         Page<Recipe> listRecipes = null;
+        int recipesByPage = size.orElse(5);
     try {
-        PageRequest pageRequest = PageRequest.of(page, 10);
+        PageRequest pageRequest = PageRequest.of(page, recipesByPage);
         listRecipes = recipeService.getAllRecipes(pageRequest);
     }catch (Exception e){
         log.info(e.getMessage());
@@ -81,6 +77,11 @@ public class RecipeController {
         try {
             recipeToSave.setName(recipe.getName());
             recipeToSave.setTime(recipe.getTime());
+            if(recipe.getPicture() == null) {
+                recipeToSave.setPicture("default.png");
+            } else {
+                recipeToSave.setPicture(recipe.getPicture());
+            }
             if (recipe.getCategories() != null){
                 List<Category>categories = new ArrayList<>();
                 for (Category category : recipe.getCategories()){
@@ -123,6 +124,7 @@ public class RecipeController {
             Recipe recipeToUpdate = recipeService.getRecipeById(recipe.getId());
             recipeToUpdate.setName(recipe.getName());
             recipeToUpdate.setTime(recipe.getTime());
+            recipeToUpdate.setPicture(recipe.getPicture());
             if (recipe.getCategories() != null){
                 List<Category> categories = new ArrayList<>();
                 for (Category category : recipe.getCategories()){
@@ -143,10 +145,9 @@ public class RecipeController {
         byte[] picture = null;
         try{
             Recipe recipe = recipeService.getRecipeById(id);
-            if(recipe.getPicture() == null) recipe.setPicture("default.jpg");
-            picture = Files.readAllBytes(Paths.get(System.getProperty("user.home")+"/recipe/picture/"+recipe.getPicture()));
+            picture = Files.readAllBytes(Paths.get(System.getProperty("user.dir")+"/pictures/"+recipe.getPicture()));
         } catch (Exception e){
-            log.error("Error to get picture: {}", id);
+            log.error( e.getMessage());
             return ResponseEntity.internalServerError().body(e.getCause());
 
         }
@@ -154,6 +155,15 @@ public class RecipeController {
         return ResponseEntity.ok().body(picture);
     }
 
-
+    @GetMapping("/recipe/home")
+    public ResponseEntity<List<Recipe>> getHomeRecipes(){
+        List<Recipe> recipes = null;
+        try {
+            recipes = recipeService.homeRandomRecipes();
+        }catch (Exception e){
+            log.info(e.getMessage());
+        }
+        return ResponseEntity.ok().body(recipes);
+    }
 
 }
