@@ -31,10 +31,10 @@ public class Recipe {
     )
     private List<Category> categories = new ArrayList<>();
 
-    @OneToMany(mappedBy = "recipe", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @OneToMany(mappedBy = "recipe", cascade = {CascadeType.ALL})
     private List<Quantity> quantities;
 
-    @OneToMany(mappedBy = "recipe",cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @OneToMany(mappedBy = "recipe",cascade = {CascadeType.ALL})
     private  List<Step> steps;
 
 }

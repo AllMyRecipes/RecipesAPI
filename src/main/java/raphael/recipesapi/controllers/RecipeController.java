@@ -6,6 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import raphael.recipesapi.DTO.RecipeDTO.ListRecipeDTO;
 import raphael.recipesapi.entities.Category;
 
 import raphael.recipesapi.entities.Recipe;
@@ -36,16 +37,20 @@ public class RecipeController {
         this.categoryService = categoryService;
     }
     @GetMapping("/recipes")
-    public ResponseEntity<Page<Recipe>> allRecipes(@RequestParam("page") int page, @RequestParam("size") Optional<Integer>size){
-        Page<Recipe> listRecipes = null;
+    public ResponseEntity<Page<ListRecipeDTO>> allRecipes(@RequestParam("page") int page, @RequestParam("size") Optional<Integer>size){
+        Page<ListRecipeDTO> listDTO = null;
         int recipesByPage = size.orElse(5);
     try {
-        PageRequest pageRequest = PageRequest.of(page, recipesByPage);
-        listRecipes = recipeService.getAllRecipes(pageRequest);
+
+     PageRequest pageRequest = PageRequest.of(page, recipesByPage);
+    Page<Recipe> listRecipes = recipeService.getAllRecipes(pageRequest);
+     listDTO = listRecipes.map(ListRecipeDTO::new);
+
+
     }catch (Exception e){
         log.info(e.getMessage());
     }
-    return ResponseEntity.ok().body(listRecipes);
+    return ResponseEntity.ok().body(listDTO);
     }
 
     @GetMapping("/recipe/{word}")
