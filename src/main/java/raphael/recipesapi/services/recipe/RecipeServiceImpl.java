@@ -53,6 +53,8 @@ public class RecipeServiceImpl implements RecipeService {
 
     @Override
     public Page<Recipe> getRecipeByCategory(PageRequest page, Long categoryId) {
+        Page <Recipe> list= recipeRepository.getRecipeByCategoriesId(page, categoryId);
+
         return recipeRepository.getRecipeByCategoriesId(page, categoryId);
     }
 

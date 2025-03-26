@@ -21,9 +21,7 @@ public class Category {
     private Long id;
     private String name;
     private String color = "#FFFFFF";
-//    @JsonIgnore
-//    @ManyToMany(mappedBy = "categories", fetch = FetchType.LAZY)
-//    private List<Recipe> recipes;
+
     @JsonIgnore
     @ManyToMany(mappedBy = "categories")
     private List<Recipe> recipes = new ArrayList<>();
